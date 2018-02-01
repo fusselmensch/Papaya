@@ -35,10 +35,11 @@ papaya.ui.Dialog = papaya.ui.Dialog || function (container, title, content, data
 /*** Static Methods ***/
 
 papaya.ui.Dialog.showModalDialog = function (dialog, viewer, dialogHtml) {
+	startWindowScroll();
     var viewerWidth, viewerHeight, dialogWidth, dialogHeight, left, top;
 
     var docElem = document.documentElement;
-    var scrollTop = window.pageYOffset || docElem.scrollTop;
+    var scrollTop = ($('html').scrollTop()) ? $('html').scrollTop() : $('body').scrollTop();//window.pageYOffset || docElem.scrollTop;
 
     viewerWidth = $(window).outerWidth();
     viewerHeight = $(window).outerHeight();

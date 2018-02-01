@@ -131,14 +131,11 @@ papaya.volume.Header.prototype.getName = function () {
 
 
 
-papaya.volume.Header.prototype.getSeriesLabels = function () {
-    return this.fileFormat.getSeriesLabels();
-};
-
-
-
-papaya.volume.Header.prototype.readImageData = function (progressMeter, onFinishedImageRead) {
-    this.fileFormat.readImageData(progressMeter, onFinishedImageRead);
+papaya.volume.Header.prototype.readImageData = function (progressMeter, onFinishedImageRead, optScale) {
+	if(!optScale){
+		optScale = 1;
+	}
+    this.fileFormat.readImageData(progressMeter, onFinishedImageRead,optScale);
 };
 
 

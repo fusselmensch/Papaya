@@ -57,8 +57,8 @@ papaya.viewer.Display.PRECISION_COORDINATE_MAX = 12;
 papaya.viewer.Display.FONT_SIZE_IMAGE_VALUE = 20;
 papaya.viewer.Display.FONT_COLOR_IMAGE_VALUE = papaya.viewer.Display.FONT_COLOR_WHITE;
 papaya.viewer.Display.FONT_TYPE_IMAGE_VALUE = "sans-serif";
-papaya.viewer.Display.PRECISION_IMAGE_VALUE = 9;
-papaya.viewer.Display.PRECISION_IMAGE_MAX = 14;
+papaya.viewer.Display.PRECISION_IMAGE_VALUE = 6;
+papaya.viewer.Display.PRECISION_IMAGE_MAX = 9;
 
 papaya.viewer.Display.FONT_SIZE_ATLAS_MINI = 14;
 papaya.viewer.Display.FONT_SIZE_ATLAS = 20;
@@ -99,7 +99,7 @@ papaya.viewer.Display.prototype.drawEmptyDisplay = function () {
 
 
 
-papaya.viewer.Display.prototype.drawDisplay = function (xLoc, yLoc, zLoc) {
+papaya.viewer.Display.prototype.drawDisplay = function (xLoc, yLoc, zLoc, optUnit) {
     var locY, val, viewerOrigin, height, atlasNumLabels, atlasLabelWidth, atlasLabel, ctr, metricsAtlas, sizeRatio,
         viewerVoxelDims, labelColorThresh, halfWidth, coordinateItemWidth, smallViewer, precision;
 
@@ -164,7 +164,10 @@ papaya.viewer.Display.prototype.drawDisplay = function (xLoc, yLoc, zLoc) {
 
         // image value
         if (!this.viewer.currentScreenVolume.rgb && !this.viewer.currentScreenVolume.dti) {
-            val = this.viewer.getCurrentValueAt(xLoc, yLoc, zLoc);
+			if(!optUnit){
+				optUnit = "";			
+			}
+            val = this.viewer.getCurrentValueAt(xLoc, yLoc, zLoc)+0.0001;
             this.canvas.currentval = val.toString();  // for unit testing
 
             locY = (height / 2.0) + (papaya.viewer.Display.FONT_SIZE_IMAGE_VALUE / 2.0) -
@@ -172,9 +175,9 @@ papaya.viewer.Display.prototype.drawDisplay = function (xLoc, yLoc, zLoc) {
             this.context.fillStyle = papaya.viewer.Display.FONT_COLOR_IMAGE_VALUE;
             this.context.font = (papaya.viewer.Display.FONT_SIZE_IMAGE_VALUE - (smallViewer ? 2 : 0)) + "px " +
                 papaya.viewer.Display.FONT_TYPE_IMAGE_VALUE;
-            precision = Math.min(papaya.viewer.Display.PRECISION_IMAGE_MAX,
-                Math.round(papaya.viewer.Display.PRECISION_IMAGE_VALUE * sizeRatio));
-            this.context.fillText(parseFloat(val.toString().substr(0, precision)), (2 * papaya.viewer.Display.PADDING) +
+            //precision = Math.min(papaya.viewer.Display.PRECISION_IMAGE_MAX,
+            //    Math.round(papaya.viewer.Display.PRECISION_IMAGE_VALUE * sizeRatio));
+            this.context.fillText(val.toString().substr(0, val.toString().indexOf(".")+4)+" "+optUnit, (2 * papaya.viewer.Display.PADDING) +
                 (3 * coordinateItemWidth), locY);
         }
 

@@ -146,6 +146,8 @@ papaya.Container.resetViewer = function (index, params) {
         }
     }
 
+
+
     papayaContainers[index].viewer.resetViewer();
     papayaContainers[index].toolbar.updateImageButtons();
     papayaContainers[index].reset();

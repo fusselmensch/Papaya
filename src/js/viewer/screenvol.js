@@ -40,7 +40,6 @@ papaya.viewer.ScreenVolume = papaya.viewer.ScreenVolume || function (vol, params
     this.rotationAbout = "Rotate About Center";
     this.isHighResSlice = this.volume.header.imageDimensions.getNumVoxelsSlice() > (512 * 512);
     this.currentCoord = currentCoord;
-    this.seriesLabels = this.volume.getSeriesLabels();
 
     var screenParams = params[this.volume.fileName];
     if (screenParams) {
@@ -98,10 +97,6 @@ papaya.viewer.ScreenVolume = papaya.viewer.ScreenVolume || function (vol, params
 
         if ((screenParams.alpha !== undefined) && !baseImage) {
             this.alpha = screenParams.alpha;
-        }
-
-        if (screenParams.labels && !this.seriesLabels) {
-            this.seriesLabels = screenParams.labels;
         }
 
         if (baseImage) {

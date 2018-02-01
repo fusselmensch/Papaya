@@ -15,6 +15,11 @@ var PAPAYA_BUILD_NUM = PAPAYA_BUILD_NUM || "0";
 
 /*** Constructor ***/
 papaya.viewer.Viewer = papaya.viewer.Viewer || function (container, width, height, params) {
+
+	this.unit = null;
+	this.title = null;	
+	this.scale = 1;
+
     this.container = container;
     this.canvas = document.createElement("canvas");
     this.canvas.width = width;
@@ -273,7 +278,7 @@ papaya.viewer.Viewer.prototype.showDialog = function (title, data, datasource, c
 
 papaya.viewer.Viewer.prototype.loadBaseImage = function (refs, forceUrl, forceEncode, forceBinary) {
     var ctr, imageRefs = [], loadableImages = this.container.findLoadableImages(refs);
-    this.volume = new papaya.volume.Volume(this.container.display, this, this.container.params);
+    this.volume = new papaya.volume.Volume(this.container.display, this, this.container.params,this.scale);
 
     if (forceBinary) {
         if (loadableImages) {
@@ -346,7 +351,7 @@ papaya.viewer.Viewer.prototype.loadOverlay = function (refs, forceUrl, forceEnco
         } else if ((loadableImage !== null) && (loadableImage.url !== undefined)) {
             this.loadingVolume.readURLs([loadableImage.url], papaya.utilities.ObjectUtils.bind(this, this.initializeOverlay));
         } else {
-            this.loadingVolume.readFiles(refs, papaya.utilities.ObjectUtils.bind(this, this.initializeOverlay));
+            this.loadingVolume.readFiles(refs, papaya.utilities.ObjectUtils.bind(this, this.initializeOverlay),this.scale);
         }
     }
 };
@@ -437,7 +442,6 @@ papaya.viewer.Viewer.prototype.initializeViewer = function () {
 
     if (this.volume.hasError()) {
         message = this.volume.error.message;
-        this.resetViewer();
         this.container.clearParams();
         this.container.display.drawError(message);
     } else {
@@ -1077,7 +1081,7 @@ papaya.viewer.Viewer.prototype.updateCursorPosition = function (viewer, xLoc, yL
             this.cursorPosition.x = xImageLoc;
             this.cursorPosition.y = yImageLoc;
             this.cursorPosition.z = zImageLoc;
-            this.container.display.drawDisplay(xImageLoc, yImageLoc, zImageLoc);
+            this.container.display.drawDisplay(xImageLoc, yImageLoc, zImageLoc, this.unit);
         } else {
             this.container.display.drawEmptyDisplay();
         }
@@ -2698,16 +2702,18 @@ papaya.viewer.Viewer.prototype.setCurrentScreenVol = function (index) {
 
 papaya.viewer.Viewer.prototype.updateWindowTitle = function () {
     var title;
+	
+	
 
     if (this.initialized) {
-        title = this.getNiceFilename(this.getCurrentScreenVolIndex());
-
+		if(this.title){
+			title = this.title;	
+		}else{
+			title = this.getNiceFilename(this.getCurrentScreenVolIndex());
+		}
         if (this.currentScreenVolume.volume.numTimepoints > 1) {
-            if (this.currentScreenVolume.seriesLabels && (this.currentScreenVolume.seriesLabels.length > this.currentScreenVolume.currentTimepoint)) {
-                title = this.currentScreenVolume.seriesLabels[this.currentScreenVolume.currentTimepoint];
-            } else {
-                title = (title + " (" + (this.currentScreenVolume.currentTimepoint + 1) + " of " + this.currentScreenVolume.volume.numTimepoints + ")");
-            }
+            title = (title + " (" + (this.currentScreenVolume.currentTimepoint + 1) + " of " +
+            this.currentScreenVolume.volume.numTimepoints + ")");
         }
 
         if (this.isZooming()) {
@@ -2757,6 +2763,20 @@ papaya.viewer.Viewer.prototype.isSelectable = function () {
 
 
 papaya.viewer.Viewer.prototype.processParams = function (params) {
+	if(params.unit){
+		this.unit = params.unit;	
+	}
+
+	if(params.title){
+		this.title = params.title;
+	}
+
+	if(params.scale){
+		this.scale = params.scale;
+	}else{
+		this.scale = 1;
+	}
+
     if (params.worldSpace) {
         this.worldSpace = true;
     }
@@ -2766,31 +2786,31 @@ papaya.viewer.Viewer.prototype.processParams = function (params) {
     }
 
 
-    if (!this.container.isDesktopMode()) {
-        if (params.showOrientation !== undefined) {
-            this.container.preferences.showOrientation = (params.showOrientation ? "Yes" : "No");
-        }
-
-        if (params.smoothDisplay !== undefined) {
-            this.container.preferences.smoothDisplay = (params.smoothDisplay ? "Yes" : "No");
-        }
-
-        if (params.radiological !== undefined) {
-            this.container.preferences.radiological = (params.radiological ? "Yes" : "No");
-        }
-
-        if (params.showRuler !== undefined) {
-            this.container.preferences.showRuler = (params.showRuler ? "Yes" : "No");
-        }
-
-        if (params.showSurfacePlanes !== undefined) {
-            this.container.preferences.showSurfacePlanes = (params.showSurfacePlanes ? "Yes" : "No");
-        }
-
-        if (params.showSurfaceCrosshairs !== undefined) {
-            this.container.preferences.showSurfaceCrosshairs = (params.showSurfaceCrosshairs ? "Yes" : "No");
-        }
+   
+    if (params.showOrientation !== undefined) {
+        this.container.preferences.showOrientation = (params.showOrientation ? "Yes" : "No");
     }
+
+    if (params.smoothDisplay !== undefined) {
+        this.container.preferences.smoothDisplay = (params.smoothDisplay ? "Yes" : "No");
+    }
+
+    if (params.radiological !== undefined) {
+        this.container.preferences.radiological = (params.radiological ? "Yes" : "No");
+    }
+
+    if (params.showRuler !== undefined) {
+        this.container.preferences.showRuler = (params.showRuler ? "Yes" : "No");
+    }
+
+    if (params.showSurfacePlanes !== undefined) {
+        this.container.preferences.showSurfacePlanes = (params.showSurfacePlanes ? "Yes" : "No");
+    }
+
+    if (params.showSurfaceCrosshairs !== undefined) {
+        this.container.preferences.showSurfaceCrosshairs = (params.showSurfaceCrosshairs ? "Yes" : "No");
+    }
+    
 };
 
 

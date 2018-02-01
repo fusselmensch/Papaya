@@ -108,7 +108,7 @@ papaya.ui.Toolbar.RGB_FILE_MENU_DATA = {"label": "File", "icons": null,
 
 papaya.ui.Toolbar.MENU_DATA = {
     "menus": [
-        papaya.ui.Toolbar.FILE_MENU_DATA,
+        //papaya.ui.Toolbar.FILE_MENU_DATA,
         {"label": "View", "icons": null,
             "items": [
                 {"label": "Orientation", "action": "ShowOrientation", "type": "checkbox", "method": "isShowingOrientation"},
@@ -133,9 +133,7 @@ papaya.ui.Toolbar.MENU_DATA = {
         },
         {"label": "TITLE", "icons": null, "titleBar": "true" },
         {"label": "EXPAND", "icons": [papaya.ui.Toolbar.ICON_EXPAND, papaya.ui.Toolbar.ICON_COLLAPSE], "items": [],
-            "method": "isCollapsable", "required": "isExpandable" },
-        {"label": "SPACE", "icons": [papaya.ui.Toolbar.ICON_IMAGESPACE, papaya.ui.Toolbar.ICON_WORLDSPACE],
-            "items": [], "method": "isWorldMode", "menuOnHover": true }
+            "method": "isCollapsable", "required": "isExpandable" }
     ]
 };
 
@@ -338,12 +336,12 @@ papaya.ui.Toolbar.prototype.buildToolbar = function () {
         }
     } else {
         if ((this.container.viewer.screenVolumes.length > 0) && this.container.viewer.screenVolumes[0].rgb) {
-            papaya.ui.Toolbar.MENU_DATA.menus[0] = papaya.ui.Toolbar.RGB_FILE_MENU_DATA;
+            //papaya.ui.Toolbar.MENU_DATA.menus[0] = papaya.ui.Toolbar.RGB_FILE_MENU_DATA;
         } else {
             if (this.container.noNewFiles) {
-                papaya.ui.Toolbar.MENU_DATA.menus[0] = papaya.ui.Toolbar.RGB_FILE_MENU_DATA;
+              //  papaya.ui.Toolbar.MENU_DATA.menus[0] = papaya.ui.Toolbar.RGB_FILE_MENU_DATA;
             } else {
-                papaya.ui.Toolbar.MENU_DATA.menus[0] = papaya.ui.Toolbar.FILE_MENU_DATA;
+                //papaya.ui.Toolbar.MENU_DATA.menus[0] = papaya.ui.Toolbar.FILE_MENU_DATA;
             }
             this.buildOpenMenuItems(papaya.ui.Toolbar.MENU_DATA);
         }
@@ -369,7 +367,7 @@ papaya.ui.Toolbar.prototype.buildToolbar = function () {
 
 papaya.ui.Toolbar.prototype.buildAtlasMenu = function () {
     if (papaya.data) {
-        if (papaya.data.Atlas) {
+        if (false) {
             var items = this.spaceMenu.items;
 
             items[0] = {"label": papaya.data.Atlas.labels.atlas.header.name, "action": "AtlasChanged-" +

@@ -233,6 +233,7 @@ papaya.ui.MenuItemRange.prototype.updateDataSource = function (focusMax) {
     minHtml.val(min);
     maxHtml.val(max);
 
+
     if (this.negatives) {
         this.dataSource.setScreenRangeNegatives(min, max);
     } else {

@@ -10,7 +10,7 @@ papaya.volume = papaya.volume || {};
 
 
 /*** Constructor ***/
-papaya.volume.Volume = papaya.volume.Volume || function (progressMeter, dialogHandler, params) {
+papaya.volume.Volume = papaya.volume.Volume || function (progressMeter, dialogHandler, params,optScale) {
     this.progressMeter = progressMeter;
     this.dialogHandler = dialogHandler;
     this.files = [];
@@ -28,6 +28,11 @@ papaya.volume.Volume = papaya.volume.Volume || function (progressMeter, dialogHa
     this.numTimepoints = 1;
     this.loaded = false;
     this.params = params;
+	
+	this.scale = 1;
+	if(optScale){
+		this.scale = optScale;	
+	}
 
     this.header = new papaya.volume.Header((this.params !== undefined) && this.params.padAllImages);
     this.imageData = new papaya.volume.ImageData((this.params !== undefined) && this.params.padAllImages);
@@ -68,7 +73,10 @@ papaya.volume.Volume.prototype.fileIsCompressed = function (filename, data) {
 
 
 
-papaya.volume.Volume.prototype.readFiles = function (files, callback) {
+papaya.volume.Volume.prototype.readFiles = function (files, callback, optScale) {
+	if(optScale){
+		this.scale = optScale;	
+	}
     this.files = files;
     this.fileName = files[0].name;
     this.onFinishedRead = callback;
@@ -369,7 +377,7 @@ papaya.volume.Volume.prototype.decompress = function (vol) {
 
 
 papaya.volume.Volume.prototype.finishedDecompress = function (vol, data) {
-    vol.rawData[0] = data;
+    vol.rawData[0] = data * this.scale;
     setTimeout(function () {vol.finishedReadData(vol); }, 0);
 };
 
@@ -400,13 +408,14 @@ papaya.volume.Volume.prototype.finishedReadHeaderData = function () {
         this.fileName = this.header.getName();
     }
 
-    this.header.readImageData(this.progressMeter, papaya.utilities.ObjectUtils.bind(this, this.finishedReadImageData));
+    this.header.readImageData(this.progressMeter, papaya.utilities.ObjectUtils.bind(this, this.finishedReadImageData),this.scale);
 };
 
 
 
 papaya.volume.Volume.prototype.finishedReadImageData = function (imageData) {
-    this.imageData.readFileData(this.header, imageData, papaya.utilities.ObjectUtils.bind(this, this.finishedLoad));
+
+    this.imageData.readFileData(this.header, imageData, papaya.utilities.ObjectUtils.bind(this, this.finishedLoad),this.scale);
 };
 
 
@@ -477,10 +486,4 @@ papaya.volume.Volume.prototype.isWorldSpaceOnly = function () {
     }
 
     return false;
-};
-
-
-
-papaya.volume.Volume.prototype.getSeriesLabels = function () {
-    return this.header.getSeriesLabels();
 };

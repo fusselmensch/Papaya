@@ -10,15 +10,22 @@ papaya.volume = papaya.volume || {};
 
 
 /*** Constructor ***/
-papaya.volume.ImageData = papaya.volume.ImageData || function (pad) {
+papaya.volume.ImageData = papaya.volume.ImageData || function (pad,optScale) {
     this.data = null;
     this.pad = pad;
+	this.scale = 1;
+	if(optScale){
+		this.scale = optScale;
+	}
 };
 
 
 /*** Prototype Methods ***/
 
-papaya.volume.ImageData.prototype.readFileData = function (header, buffer, onReadFinish) {
+papaya.volume.ImageData.prototype.readFileData = function (header, buffer, onReadFinish, optScale) {
+	if(optScale){
+		this.scale = optScale;
+	}
     var numVoxels, dv, ctr, numVoxels2, rgbBySample;
 
     if (this.pad) {
@@ -95,6 +102,11 @@ papaya.volume.ImageData.prototype.readFileData = function (header, buffer, onRea
             this.data = new Float64Array(buffer, 0, buffer.byteLength / 8);
         }
     }
+
+
+	for(var i=0; i<this.data.length; i++) {
+		this.data[i] *= this.scale;
+	}
 
     onReadFinish();
 };

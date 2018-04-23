@@ -9,9 +9,13 @@
     	<meta name="apple-mobile-web-app-capable" content="yes">
     	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
+<<<<<<< HEAD
+    	<link rel="stylesheet" type="text/css" href="papaya.css?build=1430" />
+    	<script type="text/javascript" src="papaya.js?build=1430"></script>
+=======
     	<link rel="stylesheet" type="text/css" href="papaya.css?build=1437" />
-    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script type="text/javascript" src="papaya.js?build=1437"></script>
+    	<script type="text/javascript" src="papaya.js?build=1437"></script>
+>>>>>>> 0504f24c0d0fe2122f69193b468bd72a34df4a84
     
     	<title>Papaya Viewer</title>
     

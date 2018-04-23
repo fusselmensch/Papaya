@@ -57,8 +57,8 @@ papaya.viewer.Display.PRECISION_COORDINATE_MAX = 12;
 papaya.viewer.Display.FONT_SIZE_IMAGE_VALUE = 20;
 papaya.viewer.Display.FONT_COLOR_IMAGE_VALUE = papaya.viewer.Display.FONT_COLOR_WHITE;
 papaya.viewer.Display.FONT_TYPE_IMAGE_VALUE = "sans-serif";
-papaya.viewer.Display.PRECISION_IMAGE_VALUE = 6;
-papaya.viewer.Display.PRECISION_IMAGE_MAX = 9;
+papaya.viewer.Display.PRECISION_IMAGE_VALUE = 9;
+papaya.viewer.Display.PRECISION_IMAGE_MAX = 14;
 
 papaya.viewer.Display.FONT_SIZE_ATLAS_MINI = 14;
 papaya.viewer.Display.FONT_SIZE_ATLAS = 20;

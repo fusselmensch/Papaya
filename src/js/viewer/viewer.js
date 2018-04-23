@@ -454,6 +454,7 @@ papaya.viewer.Viewer.prototype.initializeViewer = function () {
 
     if (this.volume.hasError()) {
         message = this.volume.error.message;
+        this.resetViewer();
         this.container.clearParams();
         this.container.display.drawError(message);
     } else {
@@ -2714,8 +2715,6 @@ papaya.viewer.Viewer.prototype.setCurrentScreenVol = function (index) {
 
 papaya.viewer.Viewer.prototype.updateWindowTitle = function () {
     var title;
-	
-	
 
     if (this.initialized) {
 		if(this.title){
@@ -2724,8 +2723,12 @@ papaya.viewer.Viewer.prototype.updateWindowTitle = function () {
 			title = this.getNiceFilename(this.getCurrentScreenVolIndex());
 		}
         if (this.currentScreenVolume.volume.numTimepoints > 1) {
+            if (this.currentScreenVolume.seriesLabels && (this.currentScreenVolume.seriesLabels.length > this.currentScreenVolume.currentTimepoint)) {
+                title = this.currentScreenVolume.seriesLabels[this.currentScreenVolume.currentTimepoint];
+            } else {
             title = (title + " (" + (this.currentScreenVolume.currentTimepoint + 1) + " of " +
             this.currentScreenVolume.volume.numTimepoints + ")");
+            }
         }
 
         if (this.isZooming()) {
